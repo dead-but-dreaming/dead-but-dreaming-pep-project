@@ -16,4 +16,11 @@ public class AccountService {
         this.accountDAO = accountDAO;
     }
 
+    // register new user
+    public Account registerNewUser(Account account){
+        // System.out.println("/////////////////////// registerNewUser Service");
+        Account newAccount = accountDAO.registerNewUser(account);
+        return newAccount;
+    }
+
 }
