@@ -23,4 +23,9 @@ public class AccountService {
         return newAccount;
     }
 
+    public Account authenticateUser(Account account){
+        Account loggedIn = accountDAO.authenticateUser(account);
+        return loggedIn;
+    }
+
 }

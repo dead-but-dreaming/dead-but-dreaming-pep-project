@@ -28,9 +28,7 @@ public class SocialMediaController {
 
         app.post("/register", this::registerHandler);
         
-        app.post("/login", ctx -> {
-
-        });
+        app.post("/login", this::loginHandler);
         app.post("/messages", ctx -> {
 
         });
@@ -88,6 +86,22 @@ public class SocialMediaController {
             }
         }
         // System.out.println("reached end of handler");
+    }
+
+    private void loginHandler(Context context){
+        // System.out.println("///////////////// loginHandler Controller");
+
+        Account user = context.bodyAsClass(Account.class);
+        
+        // System.out.println("attempting to authenticate user");
+        user = accountService.authenticateUser(user);
+
+        if (user != null){
+            context.json(user);
+            context.status(200);
+        } else {
+            context.status(401);
+        }
     }
 
 
