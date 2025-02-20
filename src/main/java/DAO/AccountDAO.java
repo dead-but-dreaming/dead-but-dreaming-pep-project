@@ -15,12 +15,12 @@ public class AccountDAO {
     // ```
 
     // register
-    public Account registerNewUser(Account account){
+    public Account registerNewUser(Account newUser){
         // System.out.println("//////////////// registerNewUser DAO");
         Connection conn = ConnectionUtil.getConnection();
 
-        String username = account.getUsername();
-        String password = account.getPassword();
+        String username = newUser.getUsername();
+        String password = newUser.getPassword();
 
         try {
             String sql = "INSERT INTO account(username, password) VALUES(?,?)";
@@ -37,9 +37,9 @@ public class AccountDAO {
             if(results.next()){
                 // get ID of new row, return account with new ID
                 int id = (int) results.getInt(1);
-                account.setAccount_id(id);
+                newUser.setAccount_id(id);
 
-                return account;
+                return newUser;
             }
 
         } catch(SQLException e){
