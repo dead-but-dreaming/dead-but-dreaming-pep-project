@@ -1,7 +1,9 @@
 package Controller;
 
 import Model.Account;
+import Model.Message;
 import Service.AccountService;
+import Service.MessageService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -12,9 +14,11 @@ import io.javalin.http.Context;
  */
 public class SocialMediaController {
     AccountService accountService;
+    MessageService messageService;
 
     public SocialMediaController(){
         accountService = new AccountService();
+        messageService = new MessageService();
     }    
 
     /**
@@ -27,26 +31,13 @@ public class SocialMediaController {
         // app.get("example-endpoint", this::exampleHandler);
 
         app.post("/register", this::registerHandler);
-        
         app.post("/login", this::loginHandler);
-        app.post("/messages", ctx -> {
-
-        });
-        app.get("/messages.", ctx -> {
-
-        });
-        app.get("/messages/{message_id}", ctx -> {
-
-        });
-        app.delete("/messages/{message_id}", ctx -> {
-
-        });
-        app.patch("/messages/{message_id}", ctx -> {
-
-        });
-        app.get("/accounts/{account_id}/messages", ctx -> {
-
-        });
+        app.post("/messages", this::postMessageHandler);
+        app.get("/messages", this::getMessageHandler);
+        app.get("/messages/{message_id}", ctx -> {});
+        app.delete("/messages/{message_id}", ctx -> {});
+        app.patch("/messages/{message_id}", ctx -> {});
+        app.get("/accounts/{account_id}/messages", ctx -> {});
 
         return app;
     }
@@ -104,5 +95,38 @@ public class SocialMediaController {
         }
     }
 
+    private void postMessageHandler(Context context){
+        // System.out.println("///////////////// postMessageHandler Controller");
+
+        Message message = context.bodyAsClass(Message.class);
+        
+        String text = message.getMessage_text();
+
+        if (!accountService.checkUserExists(message.getPosted_by())){
+            // invalid user id
+            context.status(400);
+        } else if (text.length() > 255){
+            // message too long
+            context.status(400);
+        } else if (text == ""){
+            // message empty
+            context.status(400);
+        } else {
+            // System.out.println("attempting to post message");
+            message = messageService.postNewMessage(message);
+    
+            if (message != null){
+                context.json(message);
+                context.status(200);
+            } else {
+                context.status(400);
+            }
+        }
+
+    }
+
+    private void getMessageHandler(Context context){
+        
+    }
 
 }

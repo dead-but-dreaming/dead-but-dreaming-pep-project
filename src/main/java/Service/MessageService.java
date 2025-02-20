@@ -16,4 +16,8 @@ public class MessageService {
         this.messageDAO = messageDAO;
     }
     
+    public Message postNewMessage(Message message){
+        return messageDAO.postNewMessage(message);
+    }
+
 }
