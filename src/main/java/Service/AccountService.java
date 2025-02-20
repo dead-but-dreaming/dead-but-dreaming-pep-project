@@ -28,4 +28,8 @@ public class AccountService {
         return loggedIn;
     }
 
+    public boolean checkUserExists(int id){
+        return accountDAO.checkUserExists(id);
+    }
+
 }

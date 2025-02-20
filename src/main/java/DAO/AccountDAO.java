@@ -84,4 +84,31 @@ public class AccountDAO {
 
         return null;
     }
+
+    public boolean checkUserExists(int id){
+        Connection conn = ConnectionUtil.getConnection();
+        
+        try {
+            String sql = "SELECT * FROM account WHERE account_id = ?";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+
+            preparedStatement.setInt(1, id);
+
+            ResultSet results = preparedStatement.executeQuery();
+
+            // if there are no rows in the result set isBeforeFirst will return false
+            // we can use this to verify the account exists in the database
+            if (results.isBeforeFirst()){
+                return true;
+            } else {
+                return false;
+            }
+            
+        } catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+        return false;
+    }
 }
