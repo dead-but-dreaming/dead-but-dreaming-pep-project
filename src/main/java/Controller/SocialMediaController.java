@@ -146,6 +146,14 @@ public class SocialMediaController {
 
         if (msg != null){
             context.json(msg);
+        }
+        
+        context.status(200);
+
+    }
+
+        if (msg != null){
+            context.json(msg);
             context.status(200);
         } else {
             context.status(400);
