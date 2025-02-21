@@ -4,6 +4,8 @@ import Model.Message;
 import Util.ConnectionUtil;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MessageDAO {
 
@@ -53,5 +55,38 @@ public class MessageDAO {
 
         return null;
     }
+
+    public List<Message> getAllMessages(){
+        Connection conn = ConnectionUtil.getConnection();
+
+        List<Message> allMessages = new ArrayList<>();
+
+        try {
+            String sql = "SELECT * FROM MESSAGE";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+
+            ResultSet results = preparedStatement.executeQuery();
+
+            while (results.next()){
+                Message msg = new Message(
+                    results.getInt("message_id"),
+                    results.getInt("posted_by"),
+                    results.getString("message_text"),
+                    results.getLong("time_posted_epoch")
+                );
+
+                allMessages.add(msg);
+            }
+
+            return allMessages;
+
+        } catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
+
 
 }
