@@ -117,4 +117,31 @@ public class MessageDAO {
     }
 
 
+    public Message deleteMessageByID(int id){
+        Message message = getMessageByID(id);
+        
+        if (message != null) {
+            Connection conn = ConnectionUtil.getConnection();
+    
+            try {
+                String sql = "DELETE FROM message WHERE message_id = ?";
+    
+                PreparedStatement preparedStatement = conn.prepareStatement(sql);
+                
+                preparedStatement.setInt(1, id);
+                int affectedRows = preparedStatement.executeUpdate();
+                
+                if (affectedRows == 1){
+                    return message;
+                }    
+                
+            } catch(SQLException e){
+                System.out.println(e.getMessage());
+            }
+        }
+
+        return null;
+    }
+
+
 }
