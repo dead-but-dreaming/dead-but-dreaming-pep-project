@@ -39,7 +39,7 @@ public class SocialMediaController {
         app.get("/messages", this::getMessageHandler);
         app.get("/messages/{message_id}", this::getMessageByID);
         app.delete("/messages/{message_id}", this::deleteMessageByID);
-        app.patch("/messages/{message_id}", ctx -> {});
+        app.patch("/messages/{message_id}", this::updateMessageByID);
         app.get("/accounts/{account_id}/messages", this::getMessagesFromUser);
 
         return app;
@@ -147,7 +147,7 @@ public class SocialMediaController {
         if (msg != null){
             context.json(msg);
         }
-        
+
         context.status(200);
 
     }
@@ -160,10 +160,34 @@ public class SocialMediaController {
             context.json(msg);
         }
 
-            context.status(200);
+        context.status(200);
         
     }
+    
+    private void updateMessageByID(Context context){
+        Message message = context.bodyAsClass(Message.class);
+        
+        int id =  Integer.parseInt(context.pathParam("message_id"));
+        String newText = message.getMessage_text();
+
+       if (newText.length() > 255){
+            // message too long
             context.status(400);
+        } else if (newText == ""){
+            // message empty
+            context.status(400);
+        } else {
+            Message msg = messageService.updateMessageByID(id, newText);
+
+            if (msg != null){
+                context.json(msg);
+                context.status(200);
+            } else {
+                context.status(400);
+            }
+        }
+
+    }
 
     private void getMessagesFromUser(Context context){
         int id =  Integer.parseInt(context.pathParam("account_id"));
@@ -175,5 +199,5 @@ public class SocialMediaController {
 
         context.status(200);
     }
-    
+
 }

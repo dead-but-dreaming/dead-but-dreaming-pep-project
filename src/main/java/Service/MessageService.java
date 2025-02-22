@@ -29,11 +29,14 @@ public class MessageService {
     public Message getMessageByID(int id){
         return messageDAO.getMessageByID(id);
     }
-
+    
     public Message deleteMessageByID(int id){
         return messageDAO.deleteMessageByID(id);
     }
 
+    public Message updateMessageByID(int id, String newText){
+        return messageDAO.updateMessageByID(id, newText);
+    }
 
     public List<Message> getMessagesByUserID(int id){
         return messageDAO.getMessagesByUserID(id);

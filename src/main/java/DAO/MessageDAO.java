@@ -116,7 +116,6 @@ public class MessageDAO {
         return null;
     }
 
-
     public Message deleteMessageByID(int id){
         Message message = getMessageByID(id);
         
@@ -143,6 +142,29 @@ public class MessageDAO {
         return null;
     }
 
+    public Message updateMessageByID(int id, String newText){
+        Connection conn = ConnectionUtil.getConnection();
+
+        try {
+            String sql = "UPDATE message SET message_text = ? WHERE message_id = ?";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            
+            preparedStatement.setString(1, newText);
+            preparedStatement.setInt(2, id);
+
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if (affectedRows == 1){
+                return getMessageByID(id);
+            }
+
+        } catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        
+        return null;
+    }
 
     public List<Message> getMessagesByUserID(int id){
         Connection conn = ConnectionUtil.getConnection();
